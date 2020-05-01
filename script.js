@@ -136,7 +136,7 @@ function getChordURL() {
 	for (let key of toPlay) {
 		path += key[0]+key[1]+'-';
 	}
-	path = path.substring(0,path.length-1);
+	path = path.replace(/#/g,'s').substring(0,path.length-1);
 	return path;
 }
 
