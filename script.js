@@ -1,5 +1,5 @@
 // Not supported in IE
-let keys = ((new URLSearchParams(window.location.search)).get('keys')+"-").split('-').slice(0,-1);
+let keys = ((new URLSearchParams(window.location.search)).get('keys')+"-").split('-').slice(0,-1).map(i => i.replace('s','#'));
 
 const keyboard = $('#keyboard');
 const instr = {'piano' : 0, 'organ': 1, 'acoustic': 2, 'edm': 3};
@@ -101,7 +101,7 @@ function addPlayChordURL() {
 		});		
 		$('#play-url').show();
 		$('#url-data').show();
-		$('#chord-in-url').text(keys.join(" - "));
+		$('#chord-in-url').text(keys.map(i=> i==false ? "" : i).join(" - "));
 	} 
 }
 
