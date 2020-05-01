@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chords</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<h1>Chords</h1>
+	<div class="cntr">
+		<button id="play-url" class="hide">Play chord from URL</button>
+		<button id="sticky">Sticky control</button>
+		<button id="play" class="hide">Play chord</button>
+		<button id="save" class="hide">Save chord</button>
+		<p id="ctrl">Hold control to select multiple notes to add to a chord</p>
+		<br />
+
+		<div id="keyboard"></div>
+		<br />
+		<br />
+
+		<div id="oct_chng">
+			<button id="left"><</button>
+			<span id="octaves">C4 - C6</span>
+			<button id="right">></button>
+		</div>
+
+		<!-- to edit -->
+		<div id="url-data" class="hide">
+			<h1>Chord from your URL:</h1>
+			<p id="chord-in-url"></p>
+		</div>
+
+		<!-- to edit -->
+		<div id="share" class="hide">
+			<h1>Share this chord</h1>
+			<p id="chord-url"></p>
+		</div>
+
+		<!-- to implement -->
+		<!-- 
+		<div id="saved-chords">
+			<h1>Saved Chords</h1>
+		</div> -->
+	</div>
+
+</body>
+<script src="audiosynth/audiosynth.js"></script>
+<script src="script.js"></script>
+</html>

@@ -1,0 +1,3 @@
+[submodule "audiosynth"]
+	path = audiosynth
+	url = https://github.com/keithwhor/audiosynth.git

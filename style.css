@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=News+Cycle:wght@700&display=swap');
+
+#keyboard {
+	border:1px solid black;
+	/*padding:5px;*/
+	display:inline-block;
+	height:175px;
+	margin: 0 auto;
+}
+
+.white {
+	background-color:#fff;
+	height:175px;
+	z-index:3;
+	/*border:2px black;*/
+	border-width: 2px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-right-style: none;
+	border-color: black;
+	width:40px;
+	/*position:relative;*/
+	position:absolute;
+	color: black;
+}
+
+.white:last-child {
+	border-right-style: solid;
+}
+
+.black {
+	background-color:#000;
+	height:110px;
+	z-index:4;
+	position:absolute;
+	/*left:-10px;*/
+	/*border:1px dashed white;*/
+	width:30px;
+	/*position:fixed;*/
+	color: white;
+}
+
+.key {
+	display:inline-block;
+	margin:0px;
+	margin-right:-4px;
+	vertical-align: top;
+	text-align: center;
+	font-size: 80%;
+	font-family: 'News Cycle', sans-serif;
+
+	display:flex;
+	align-items: center; 
+	justify-content: flex-start;
+	flex-direction: column-reverse;
+}
+
+.key > p:not(:first-child) {
+	margin: 0;
+}
+
+.key > p {
+	margin-top: 0;
+}
+
+.black:hover {
+	background-color: #555;
+}
+
+.white:hover {
+	background-color: #eee;
+}
+
+.selected.white {
+	background-color: #dfe7f1 !important;
+}
+
+.selected.black {
+	background-color: lightsteelblue !important;
+}
+
+div {
+	box-sizing: border-box;
+}
+
+* {
+	/*font-family: 'Tahoma', sans-serif;*/
+}
+
+.hide {
+	display:none;
+}
