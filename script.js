@@ -17,11 +17,11 @@ $(document).ready(_ => {
 	$('#save').hide();
 	$('#play').hide();
 	$('#share').hide();
+	$('#copy-conf').hide();
 
 	genKeyboard();
 
 	addPlayChordURL();
-
 	addCtrlPress();
 
 	addOctaveChange();
@@ -33,7 +33,12 @@ $(document).ready(_ => {
 	$('#play').click(_ => {
 		playChord();
 	});
+
+	$('#copy-url').click(_ => {
+		copyChordURL();
+	});
 });
+
 
 function addOctaveChange() {
 	$('#left').click(_ => {
@@ -62,9 +67,22 @@ function shareChord() {
 	if (toPlay.length>0) {
 		$('#share').show();
 		$('#chord-url').text(getChordURL());
+		$('#chord-url').attr('href','https://'+getChordURL());
 	} else {
 		$('#share').hide();
 	}
+}
+
+function copyChordURL() {
+    let range = document.createRange();
+    range.selectNode($(`#chord-url`)[0]);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range); 
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+
+    $('#copy-conf').show();
+    setTimeout(()=>$('#copy-conf').fadeOut(),1000);
 }
 
 function addPlayChordURL() {
@@ -114,7 +132,7 @@ function processChordURL() {
 }
 
 function getChordURL() {
-	let path = "/path/to/url.html?keys=";
+	let path = "dulldesk.github.io/chords?keys=";
 	for (let key of toPlay) {
 		path += key[0]+key[1]+'-';
 	}
@@ -158,7 +176,7 @@ function releaseCtrl() {
 	$('#chord-url').text("");
 	holdCtrl = false;
 	if (toPlay.length > 0) {
-		console.log(toPlay);
+		// console.log(toPlay);
 		playChord();
 		$('.selected').map((ind,elm) => $(elm).removeClass('selected'));
 		toPlay = [];
@@ -234,7 +252,3 @@ function addKey(k,oct,l,add=true) {
 		} else piano.play(note,octv, 2);
 	});
 }
-
-// if given chord : h1 of name, press button to play
-
-// "share chord"

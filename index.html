@@ -8,8 +8,8 @@
 </head>
 <body>
 	<h1>Chords</h1>
+	<p><i>a work in progress</i></p>
 	<div class="cntr">
-		<button id="play-url" class="hide">Play chord from URL</button>
 		<button id="sticky">Sticky control</button>
 		<button id="play" class="hide">Play chord</button>
 		<button id="save" class="hide">Save chord</button>
@@ -28,15 +28,20 @@
 
 		<!-- to edit -->
 		<div id="url-data" class="hide">
-			<h1>Chord from your URL:</h1>
+			<h2>Chord from your URL:</h2>
 			<p id="chord-in-url"></p>
+			<button id="play-url" class="hide">Play chord from URL</button>
 		</div>
+
 
 		<!-- to edit -->
 		<div id="share" class="hide">
-			<h1>Share this chord</h1>
-			<p id="chord-url"></p>
+			<h2>Share this chord</h2>
+			<p><a id="chord-url"></a></p>
+			<button id="copy-url">Copy url</button>
+			<span id="copy-conf">&nbspCopied!</span>
 		</div>
+		<br />
 
 		<!-- to implement -->
 		<!-- 
