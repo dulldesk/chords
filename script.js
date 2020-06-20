@@ -12,6 +12,8 @@ let currOct = 4;
 let holdCtrl = false;
 let toPlay = [];
 
+let drag = false;
+
 $(document).ready(_ => {
 	$('#play-url').hide();
 	$('#save').hide();
@@ -37,8 +39,19 @@ $(document).ready(_ => {
 	$('#copy-url').click(_ => {
 		copyChordURL();
 	});
+
+	detectMouseDown();
 });
 
+function detectMouseDown() {
+	$(document).mousedown(() => {
+		drag = true;
+	});
+
+	$(document).mouseup(() => {
+		drag = false;
+	});	
+}
 
 function addOctaveChange() {
 	$('#left').click(_ => {
