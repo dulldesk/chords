@@ -41,6 +41,10 @@ $(document).ready(_ => {
 	});
 
 	detectMouseDown();
+
+	$('.key').mouseenter(function() {
+		if (drag) playByDataKey($(this).attr('data-key'));
+	});
 });
 
 function detectMouseDown() {
@@ -98,6 +102,15 @@ function copyChordURL() {
     setTimeout(()=>$('#copy-conf').fadeOut(),1000);
 }
 
+function getChordURL() {
+	let path = "dulldesk.github.io/chords?keys=";
+	for (let key of toPlay) {
+		path += key[0]+key[1]+'-';
+	}
+	path = path.replace(/#/g,'s').substring(0,path.length-1);
+	return path;
+}
+
 function addPlayChordURL() {
 	processChordURL();
 	if (keys) {
@@ -142,15 +155,6 @@ function processChordURL() {
 			}
 		}
 	} else keys = false;
-}
-
-function getChordURL() {
-	let path = "dulldesk.github.io/chords?keys=";
-	for (let key of toPlay) {
-		path += key[0]+key[1]+'-';
-	}
-	path = path.replace(/#/g,'s').substring(0,path.length-1);
-	return path;
 }
 
 function addCtrlPress() {
@@ -221,9 +225,6 @@ function genKeyboard(add=true) {
 	}
 }
 
-// add data attribute
-// each key is c0, name
-// change according to that
 function addKey(k,oct,l,add=true) {
 	const nom = `${k}${oct}`;
 	const dataid = `${k.replace('#','s')}${oct-currOct}`;
@@ -247,21 +248,26 @@ function addKey(k,oct,l,add=true) {
 	div.append(p);
 	keyboard.append(div);
 
-	div.click(_ => {
+	div.mousedown(_ => {
 		// datakey may change
-		const datakey = div.attr('data-key').split('-');
-		const note = datakey[0].replace('s','#');
-		const octv = datakey[1];
-
-		if (holdCtrl) {
-			if (div.hasClass('selected')) {
-				toPlay = toPlay.filter(i => !(i[0] == note && i[1] == octv)); //toPlay.delete([k,oct,2]);
-				div.removeClass('selected');
-			} else {
-				toPlay.push([note,octv,2]);
-				div.addClass('selected');
-			}
-			shareChord();
-		} else piano.play(note,octv, 2);
+		playByDataKey(div.attr('data-key'));
 	});
+}
+
+function playByDataKey(key) {
+	const datakey = key.split('-');
+	const note = datakey[0].replace('s','#');
+	const octv = datakey[1];
+	const div = $(`*[data-key="${key}"]`);
+
+	if (holdCtrl) {
+		if (div.hasClass('selected')) {
+			toPlay = toPlay.filter(i => !(i[0] == note && i[1] == octv)); //toPlay.delete([k,oct,2]);
+			div.removeClass('selected');
+		} else {
+			toPlay.push([note,octv,2]);
+			div.addClass('selected');
+		}
+		shareChord();
+	} else piano.play(note,octv, 2);
 }
