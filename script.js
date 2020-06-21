@@ -4,7 +4,7 @@ let keys = ((new URLSearchParams(window.location.search)).get('keys')+"-").split
 const keyboard = $('#keyboard');
 const instr = {'piano' : 0, 'organ': 1, 'acoustic': 2, 'edm': 3};
 
-Synth.debug();
+// Synth.debug();
 
 const piano = Synth.createInstrument('piano');
 let currOct = 4;
@@ -12,7 +12,9 @@ let currOct = 4;
 let holdCtrl = false;
 let toPlay = [];
 
-let drag = false;
+// let drag = false;
+// let currKey = undefined;
+let mousedown = false;
 
 $(document).ready(_ => {
 	$('#play-url').hide();
@@ -43,18 +45,31 @@ $(document).ready(_ => {
 	detectMouseDown();
 
 	$('.key').mouseenter(function() {
-		if (drag) playByDataKey($(this).attr('data-key'));
+		if (mousedown) playByDataKey($(this).attr('data-key'), true);
 	});
 });
 
 function detectMouseDown() {
+	// $('.key').mouseover(function() {
+	// 	if (!mousedown) return;
+		
+	// 	if (currKey && $(this).attr('data-key') != currKey) {
+	// 		drag = true;
+	// });
+
 	$(document).mousedown(() => {
-		drag = true;
+		mousedown = true;
 	});
 
 	$(document).mouseup(() => {
-		drag = false;
+		mousedown = false;
+		// drag = false;
+		// currKey = undefined;
 	});	
+
+	$(document).mouseup(() => {
+		$('.key').removeClass('played');
+	});
 }
 
 function addOctaveChange() {
@@ -77,6 +92,8 @@ function addOctaveChange() {
 		$('#octaves').text(`C${currOct} - C${currOct+2}`);
 	}
 }
+
+/* chord sharing */
 
 function saveChord() {}
 
@@ -157,6 +174,8 @@ function processChordURL() {
 	} else keys = false;
 }
 
+/* chord note selection */
+
 function addCtrlPress() {
 	$(document).keydown(evt => {
 		if (evt.ctrlKey) pressCtrl();
@@ -193,7 +212,6 @@ function releaseCtrl() {
 	$('#chord-url').text("");
 	holdCtrl = false;
 	if (toPlay.length > 0) {
-		// console.log(toPlay);
 		playChord();
 		$('.selected').map((ind,elm) => $(elm).removeClass('selected'));
 		toPlay = [];
@@ -208,6 +226,8 @@ function playChord() {
 		piano.play(key[0],key[1],key[2]);
 	}
 }
+
+/* keyboard generation */
 
 function genKeyboard(add=true) {
 	const notes = "CDEFGAB";
@@ -225,14 +245,34 @@ function genKeyboard(add=true) {
 	}
 }
 
+function toPlayNote(k, oct, l) {
+	for (let note of toPlay) {
+		if (note[0] == k && note[1] == oct) return true;
+	}
+	return false;
+}
+
 function addKey(k,oct,l,add=true) {
 	const nom = `${k}${oct}`;
 	const dataid = `${k.replace('#','s')}${oct-currOct}`;
 	const isWhite = !k.includes('#');
+	const datakey = `${k}-${oct}`;
 
 	if (!add) {
-		$(`#${dataid}`).attr('data-key',`${k}-${oct}`);
+		let div = $(`#${dataid}`);
+		div.attr('data-key',datakey);
 		$(`#${dataid} .label`).text(nom);
+
+		if (toPlayNote(k, oct)) {
+			div.addClass('selected');
+		} else {
+			div.removeClass('selected');
+		}
+
+		div.off('mousedown');
+		div.mousedown(() => {
+			playByDataKey(datakey);
+		});
 		return;
 	}
 
@@ -241,33 +281,71 @@ function addKey(k,oct,l,add=true) {
 	div.addClass(isWhite ? 'white' : 'black');
 	div.addClass('key');
 	div.attr('id',`${dataid}`);
-	div.attr('data-key',`${k}-${oct}`);
+	div.attr('data-key',datakey);
 	div.css('left',l);
 	p.addClass("label");
 	p.text(nom);
 	div.append(p);
 	keyboard.append(div);
 
-	div.mousedown(_ => {
+	div.mousedown(() => {
 		// datakey may change
-		playByDataKey(div.attr('data-key'));
+		// currKey = datakey;
+		playByDataKey(datakey);
 	});
+
 }
 
-function playByDataKey(key) {
+function playByDataKey(key, hover=false) {
 	const datakey = key.split('-');
 	const note = datakey[0].replace('s','#');
 	const octv = datakey[1];
 	const div = $(`*[data-key="${key}"]`);
+	// currKey = key;
 
 	if (holdCtrl) {
 		if (div.hasClass('selected')) {
-			toPlay = toPlay.filter(i => !(i[0] == note && i[1] == octv)); //toPlay.delete([k,oct,2]);
+			toPlay = toPlay.filter(i => !(i[0] == note && i[1] == octv)); //toPlay.delete [k,oct,2];
 			div.removeClass('selected');
 		} else {
 			toPlay.push([note,octv,2]);
 			div.addClass('selected');
 		}
+
 		shareChord();
 	} else piano.play(note,octv, 2);
+
+	addActiveClass(div,hover);
+}
+
+
+function addActiveClass(div, hover=false) {
+	div.addClass("played");
+
+	function mouseUpEvt() {
+		div.removeClass("played");
+		div.off('mouseup');
+	}
+
+	function mouseOutEvt() {
+		if (isHoveringOverKey(div.attr('data-key'))/* || currKey != div.attr('data-key')*/)  {
+
+			div.removeClass("played");
+		}
+		if (!div.hasClass('played')) div.off('mouseout');
+	}
+
+	div.off('mouseup');
+	div.on('mouseup', mouseUpEvt);
+	div.off('mouseout');
+	div.on('mouseout', mouseOutEvt);
+}
+
+function isHoveringOverKey(key=undefined) {
+	// to-do: clean
+	let x = false;
+	$('.key').each((i, elm) => {
+		if ($(elm).is(':hover') && $(elm).attr('data-key') != key) x = true;
+	});
+	return x;
 }
