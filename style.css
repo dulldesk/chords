@@ -65,7 +65,7 @@
 }
 
 .black:hover {
-	background-color: #555;
+	background-color: #666;
 }
 
 .white:hover {
@@ -73,13 +73,11 @@
 }
 
 .black.played {
-	/*background-color: #333;*/
-	background-color: darkgreen;
+	background-color: #444;
 }
 
 .white.played {
-	/*background-color: #ddd;*/
-	background-color: lightgreen;
+	background-color: #ddd;
 }
 
 .selected.white {
