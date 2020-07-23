@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=News+Cycle:wght@700&display=swap');
-
 #keyboard {
 	border:1px solid black;
 	/*padding:5px;*/
@@ -98,11 +96,4 @@ div {
 
 .hide {
 	display:none;
-}
-
-.no-select {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
